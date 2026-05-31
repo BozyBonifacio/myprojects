@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bozy Bonifacio — Projects Portfolio</title>
+  <meta name="description" content="Test projects and experiments by Bozy Bonifacio — Terraform, Kubernetes, TypeScript apps, Databricks, and more." />
+  <meta name="author" content="Bozy Bonifacio" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Bozy Bonifacio — Projects Portfolio" />
+  <meta property="og:description" content="A showcase of test projects: Terraform, Kubernetes, TypeScript, Databricks and more." />
+  <meta property="og:url" content="https://bozybonifacio.github.io/myprojects/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <header class="nav">
+    <a href="#top" class="nav__brand"><span class="nav__dot"></span>bozy<span class="accent">.dev</span></a>
+    <nav class="nav__links">
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/BozyBonifacio" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <p class="hero__eyebrow">DevOps · Cloud · Full-stack experiments</p>
+    <h1 class="hero__title">Hi, I'm <span class="accent">Bozy Bonifacio</span>.<br />I build &amp; break things to learn.</h1>
+    <p class="hero__sub">
+      A living collection of my test projects and proofs-of-concept — from
+      Terraform infrastructure and Kubernetes to TypeScript apps, data pipelines, and games.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#projects">View projects</a>
+      <a class="btn btn--ghost" href="https://github.com/BozyBonifacio" target="_blank" rel="noopener">GitHub profile</a>
+    </div>
+    <div class="hero__stats" id="hero-stats">
+      <div class="stat"><span class="stat__num" data-count="14">14</span><span class="stat__label">Repositories</span></div>
+      <div class="stat"><span class="stat__num">8+</span><span class="stat__label">Tech stacks</span></div>
+      <div class="stat"><span class="stat__num">∞</span><span class="stat__label">Things to learn</span></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <main class="section" id="projects">
+    <div class="section__head">
+      <h2 class="section__title">Projects</h2>
+      <p class="section__desc">Hand-picked experiments. Live data (last updated, stars) is pulled from the GitHub API.</p>
+      <div class="filters" id="filters" role="tablist" aria-label="Filter projects by tag"></div>
+    </div>
+    <div class="grid" id="project-grid"><!-- cards injected by script.js --></div>
+  </main>
+
+  <!-- About -->
+  <section class="section about" id="about">
+    <div class="about__inner">
+      <h2 class="section__title">About</h2>
+      <p>
+        I'm a technologist who learns by building. This site is an evolving sandbox of
+        small projects I use to explore tools and ideas — infrastructure-as-code,
+        container orchestration, data engineering, and web/app development.
+      </p>
+      <div class="skills" id="skills">
+        <span class="chip">Terraform</span>
+        <span class="chip">Kubernetes</span>
+        <span class="chip">Docker</span>
+        <span class="chip">Databricks</span>
+        <span class="chip">Python</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">JavaScript</span>
+        <span class="chip">C#</span>
+        <span class="chip">HTML / CSS</span>
+        <span class="chip">Azure</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Built by Bozy Bonifacio · <a href="https://github.com/BozyBonifacio/myprojects" target="_blank" rel="noopener">Source</a></p>
+    <p class="footer__small">Deployed with GitHub Pages</p>
+  </footer>
+
+  <script src="projects.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
