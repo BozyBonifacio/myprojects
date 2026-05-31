@@ -323,19 +323,23 @@ window.PROJECTS = [
     demo: null,
     shots: [
       {
-        kind: "screen",
-        frame: "phone",
-        title: "gameplay",
-        caption: "Tap to flap — HTML5 canvas game loop.",
-        html:
-          '<div class="mk-game">' +
-          '<div class="mk-game__score">12</div>' +
-          '<div class="mk-pipe mk-pipe--top"></div>' +
-          '<div class="mk-pipe mk-pipe--bot"></div>' +
-          '<div class="mk-bird">🐤</div>' +
-          '<div class="mk-game__ground"></div>' +
-          "</div>",
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/flappybird1.png",
+        caption: "Flappy Bird 1",
       },
+      {
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/flappybird2.png",
+        caption: "Flappy Bird 2",
+      },
+            {
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/flappybird3.png",
+        caption: "Flappy Bird 3",
+      }
     ],
   },
   {
