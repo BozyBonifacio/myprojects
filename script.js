@@ -18,7 +18,24 @@
 
   // --- Sorting ---
   // GitHub metadata (created_at / pushed_at / stars), filled in best-effort.
+  // Persisted to localStorage so reloads don't re-hit GitHub's 60 req/hr/IP
+  // unauthenticated limit — exhausting it leaves the date sorts with no data.
+  var META_KEY = "bozy.meta";
+  var META_TTL = 6 * 60 * 60 * 1000; // refetch at most every 6h
   var metaCache = {};
+  var metaFetchedAt = 0;
+  try {
+    var rawMeta = localStorage.getItem(META_KEY);
+    if (rawMeta) {
+      var parsedMeta = JSON.parse(rawMeta);
+      if (parsedMeta && parsedMeta.data) {
+        metaCache = parsedMeta.data;
+        metaFetchedAt = parsedMeta.at || 0;
+      }
+    }
+  } catch (e) {
+    /* unreadable/absent cache — start empty */
+  }
 
   // Ascending tie-break, always applied in natural order regardless of direction.
   function nameCmp(a, b) {
@@ -40,7 +57,9 @@
       return function (a, b) {
         var ta = metaCache[a.repo] && metaCache[a.repo][field];
         var tb = metaCache[b.repo] && metaCache[b.repo][field];
-        if (!ta && !tb) return nameCmp(a, b);
+        // No dates loaded yet (e.g. rate-limited): order by name, but still
+        // respond to the direction toggle so the control visibly works.
+        if (!ta && !tb) return dir * nameCmp(a, b);
         if (!ta) return 1;
         if (!tb) return -1;
         var d = new Date(ta).getTime() - new Date(tb).getTime();
@@ -248,6 +267,17 @@
 
   // Fetch all repo metadata once, then re-render so the date sorts have data.
   function prefetchMeta() {
+    if (!projects.length) return;
+    // If the cache is fresh and complete, trust it and skip the network
+    // entirely — this is what keeps us under the rate limit across reloads.
+    var fresh = metaFetchedAt && Date.now() - metaFetchedAt < META_TTL;
+    var complete = projects.every(function (p) {
+      return metaCache[p.repo];
+    });
+    if (fresh && complete) {
+      renderCards(true);
+      return;
+    }
     var pending = projects.map(function (p) {
       return fetch("https://api.github.com/repos/" + user + "/" + p.repo)
         .then(function (r) {
@@ -265,8 +295,16 @@
           /* offline or rate-limited — silently keep static card */
         });
     });
-    if (!pending.length) return;
     Promise.all(pending).then(function () {
+      metaFetchedAt = Date.now();
+      try {
+        localStorage.setItem(
+          META_KEY,
+          JSON.stringify({ at: metaFetchedAt, data: metaCache })
+        );
+      } catch (e) {
+        /* storage full/unavailable — cache stays in-memory only */
+      }
       renderCards(true);
     });
   }
