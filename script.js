@@ -20,36 +20,60 @@
   // GitHub metadata (created_at / pushed_at / stars), filled in best-effort.
   var metaCache = {};
 
-  function byName(a, b) {
+  // Ascending tie-break, always applied in natural order regardless of direction.
+  function nameCmp(a, b) {
     return (a.title || "").localeCompare(b.title || "");
   }
-  // Newest first. Projects without loaded metadata sink to the bottom.
-  function byDate(field) {
-    return function (a, b) {
-      var ta = metaCache[a.repo] && metaCache[a.repo][field];
-      var tb = metaCache[b.repo] && metaCache[b.repo][field];
-      if (!ta && !tb) return byName(a, b);
-      if (!ta) return 1;
-      if (!tb) return -1;
-      var d = new Date(tb).getTime() - new Date(ta).getTime();
-      return d !== 0 ? d : byName(a, b);
+
+  // Each comparator is a factory taking dir (+1 ascending, -1 descending).
+  function makeName() {
+    return function (dir) {
+      return function (a, b) {
+        return dir * nameCmp(a, b);
+      };
+    };
+  }
+  // Ascending base = oldest first. Projects without loaded metadata always sink
+  // to the bottom (direction-independent) so the list stays sensible offline.
+  function makeDate(field) {
+    return function (dir) {
+      return function (a, b) {
+        var ta = metaCache[a.repo] && metaCache[a.repo][field];
+        var tb = metaCache[b.repo] && metaCache[b.repo][field];
+        if (!ta && !tb) return nameCmp(a, b);
+        if (!ta) return 1;
+        if (!tb) return -1;
+        var d = new Date(ta).getTime() - new Date(tb).getTime();
+        return d !== 0 ? dir * d : nameCmp(a, b);
+      };
     };
   }
 
   // Insertion order doubles as dropdown order; first entry is the default.
   var SORTS = {
-    modified: { label: "Last modified", fn: byDate("pushed_at") },
-    created: { label: "Date created", fn: byDate("created_at") },
-    name: { label: "Name (A–Z)", fn: byName },
+    modified: { label: "Last modified", cmp: makeDate("pushed_at") },
+    created: { label: "Date created", cmp: makeDate("created_at") },
+    name: { label: "Name", cmp: makeName() },
   };
   var SORT_KEY = "bozy.sort";
+  var DIR_KEY = "bozy.sortDir";
   // Restore the saved choice, falling back to the default if it's missing/stale.
   var activeSort = "modified";
+  var activeDir = "desc"; // newest-first / Z–A
   try {
     var saved = localStorage.getItem(SORT_KEY);
     if (saved && SORTS[saved]) activeSort = saved;
+    var savedDir = localStorage.getItem(DIR_KEY);
+    if (savedDir === "asc" || savedDir === "desc") activeDir = savedDir;
   } catch (e) {
-    /* localStorage unavailable (private mode / disabled) — use default */
+    /* localStorage unavailable (private mode / disabled) — use defaults */
+  }
+
+  function dirSign() {
+    return activeDir === "asc" ? 1 : -1;
+  }
+  function sortComparator() {
+    return (SORTS[activeSort] || SORTS.modified).cmp(dirSign());
   }
 
   var sortSelect = document.getElementById("sort-select");
@@ -69,6 +93,24 @@
     }
     renderCards();
   });
+
+  var dirBtn = document.getElementById("sort-dir");
+  function updateDirBtn() {
+    dirBtn.textContent = activeDir === "asc" ? "↑" : "↓";
+    dirBtn.title = activeDir === "asc" ? "Ascending" : "Descending";
+    dirBtn.setAttribute("aria-label", "Sort direction: " + dirBtn.title);
+  }
+  dirBtn.addEventListener("click", function () {
+    activeDir = activeDir === "asc" ? "desc" : "asc";
+    try {
+      localStorage.setItem(DIR_KEY, activeDir);
+    } catch (e) {
+      /* ignore write failures */
+    }
+    updateDirBtn();
+    renderCards();
+  });
+  updateDirBtn();
 
   allTags.forEach(function (tag) {
     var b = document.createElement("button");
@@ -133,7 +175,7 @@
     var visible = projects.filter(function (p) {
       return activeFilter === "All" || (p.tags || []).indexOf(activeFilter) !== -1;
     });
-    visible.sort((SORTS[activeSort] || SORTS.modified).fn);
+    visible.sort(sortComparator());
     grid.innerHTML = visible.map(cardHTML).join("");
     fillMeta(visible);
     if (instant) {

@@ -219,6 +219,21 @@ a { color: inherit; text-decoration: none; }
 .sort__select:hover { color: var(--text); border-color: var(--accent); }
 .sort__select:focus-visible { outline: none; border-color: var(--accent); }
 .sort__select option { background: var(--bg-soft); color: var(--text); }
+.sort__dir {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.sort__dir:hover { color: var(--accent-2); border-color: var(--accent); }
+.sort__dir:focus-visible { outline: none; border-color: var(--accent); }
 
 /* ---------- Project grid ---------- */
 .grid {
