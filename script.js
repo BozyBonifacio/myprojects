@@ -131,6 +131,11 @@
     return "https://github.com/" + user + "/" + repo;
   }
 
+  // Explicit `url` wins; otherwise build the GitHub URL from `repo`.
+  function projectUrl(p) {
+    return p.url || repoUrl(p.repo);
+  }
+
   function cardHTML(p) {
     var tags = (p.tags || [])
       .map(function (t) {
@@ -163,7 +168,7 @@
       '<p class="card__blurb">' + p.blurb + "</p>" +
       '<div class="card__tags">' + tags + "</div>" +
       '<div class="card__links">' +
-      '<a class="card__link" href="' + repoUrl(p.repo) + '" target="_blank" rel="noopener">View code →</a>' +
+      '<a class="card__link" href="' + projectUrl(p) + '" target="_blank" rel="noopener">View code →</a>' +
       shotsBtn +
       demoBtn +
       "</div>" +
@@ -422,7 +427,7 @@
     var p = projects.filter(function (x) { return x.repo === repo; })[0];
     if (!p || !p.shots) return;
     lbTitle.textContent = p.title;
-    lbRepo.href = repoUrl(p.repo);
+    lbRepo.href = projectUrl(p);
     lbCount = p.shots.length;
     lbIndex = 0;
     lbTrack.innerHTML = p.shots

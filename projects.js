@@ -1,4 +1,4 @@
-// Project catalogue. Edit this list to add / remove / reorder cards.
+:// Project catalogue. Edit this list to add / remove / reorder cards.
 // `repo` must match the GitHub repository name so live stats can be fetched.
 // `demo` is optional — set it to a live URL or leave it null.
 //
@@ -14,6 +14,7 @@ window.PROJECTS = [
   {
     title: "terraform-infracost",
     repo: "terraform-infracost",
+    url: "https://github.com/BozyBonifacio/terraform-infracost",
     blurb: "Infrastructure-as-Code experiments with Terraform — integration with InfraCost. Shift left for cost tracking.",
     tags: ["Terraform", "IaC", "Cloud"],
     icon: "🏗️",
@@ -317,6 +318,7 @@ window.PROJECTS = [
   {
     title: "flappy-bird",
     repo: "flappy-bird",
+    url: "https://bozybonifacio.github.io/flappy-bird/",
     blurb: "A browser clone of the classic Flappy Bird game built with HTML5 canvas.",
     tags: ["HTML", "Game", "JavaScript"],
     icon: "🐦",
