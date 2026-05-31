@@ -14,23 +14,16 @@ window.PROJECTS = [
   {
     title: "terraform-infracost",
     repo: "terraform-infracost",
-    blurb: "Infrastructure-as-Code experiments with Terraform — provisioning and tearing down cloud resources declaratively.",
+    blurb: "Infrastructure-as-Code experiments with Terraform — integration with InfraCost. Shift left for cost tracking.",
     tags: ["Terraform", "IaC", "Cloud"],
     icon: "🏗️",
     demo: null,
     shots: [
       {
-        kind: "cost",
-        title: "Infracost — monthly cost estimate",
-        currency: "$",
-        rows: [
-          { name: "aws_instance.web", detail: "t3.micro · 730 hrs", monthly: 7.59 },
-          { name: "aws_instance.app[0,1]", detail: "t3.medium · 2 × 730 hrs", monthly: 60.74 },
-          { name: "aws_lb.public", detail: "Application Load Balancer", monthly: 16.43 },
-          { name: "aws_db_instance.main", detail: "db.t3.small · PostgreSQL", monthly: 24.82 },
-          { name: "aws_ebs_volume.data", detail: "100 GB · gp3", monthly: 8.0 },
-        ],
-        note: "OVERALL TOTAL increases by $117.58/mo (+$1,410.96/yr)",
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/infracost1.png",
+        caption: "Infracost — monthly cost estimate",
       },
       {
         kind: "terminal",
