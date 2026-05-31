@@ -1,4 +1,4 @@
-:// Project catalogue. Edit this list to add / remove / reorder cards.
+// Project catalogue. Edit this list to add / remove / reorder cards.
 // `repo` must match the GitHub repository name so live stats can be fetched.
 // `demo` is optional — set it to a live URL or leave it null.
 //
