@@ -57,6 +57,10 @@
       <h2 class="section__title">Projects</h2>
       <p class="section__desc">Hand-picked experiments. Click a card's <strong>Screenshots</strong> to flip through the UI output and cost analysis. Live stats are pulled from the GitHub API.</p>
       <div class="filters" id="filters" role="tablist" aria-label="Filter projects by tag"></div>
+      <div class="sort">
+        <label class="sort__label" for="sort-select">Sort by</label>
+        <select class="sort__select" id="sort-select" aria-label="Sort projects"></select>
+      </div>
     </div>
     <div class="grid" id="project-grid"><!-- cards injected by script.js --></div>
   </main>

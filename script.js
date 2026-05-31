@@ -16,6 +16,60 @@
 
   var activeFilter = "All";
 
+  // --- Sorting ---
+  // GitHub metadata (created_at / pushed_at / stars), filled in best-effort.
+  var metaCache = {};
+
+  function byName(a, b) {
+    return (a.title || "").localeCompare(b.title || "");
+  }
+  // Newest first. Projects without loaded metadata sink to the bottom.
+  function byDate(field) {
+    return function (a, b) {
+      var ta = metaCache[a.repo] && metaCache[a.repo][field];
+      var tb = metaCache[b.repo] && metaCache[b.repo][field];
+      if (!ta && !tb) return byName(a, b);
+      if (!ta) return 1;
+      if (!tb) return -1;
+      var d = new Date(tb).getTime() - new Date(ta).getTime();
+      return d !== 0 ? d : byName(a, b);
+    };
+  }
+
+  // Insertion order doubles as dropdown order; first entry is the default.
+  var SORTS = {
+    modified: { label: "Last modified", fn: byDate("pushed_at") },
+    created: { label: "Date created", fn: byDate("created_at") },
+    name: { label: "Name (A–Z)", fn: byName },
+  };
+  var SORT_KEY = "bozy.sort";
+  // Restore the saved choice, falling back to the default if it's missing/stale.
+  var activeSort = "modified";
+  try {
+    var saved = localStorage.getItem(SORT_KEY);
+    if (saved && SORTS[saved]) activeSort = saved;
+  } catch (e) {
+    /* localStorage unavailable (private mode / disabled) — use default */
+  }
+
+  var sortSelect = document.getElementById("sort-select");
+  Object.keys(SORTS).forEach(function (key) {
+    var o = document.createElement("option");
+    o.value = key;
+    o.textContent = SORTS[key].label;
+    if (key === activeSort) o.selected = true;
+    sortSelect.appendChild(o);
+  });
+  sortSelect.addEventListener("change", function () {
+    activeSort = sortSelect.value;
+    try {
+      localStorage.setItem(SORT_KEY, activeSort);
+    } catch (e) {
+      /* ignore write failures */
+    }
+    renderCards();
+  });
+
   allTags.forEach(function (tag) {
     var b = document.createElement("button");
     b.className = "filter" + (tag === "All" ? " filter--active" : "");
@@ -75,13 +129,21 @@
     );
   }
 
-  function renderCards() {
+  function renderCards(instant) {
     var visible = projects.filter(function (p) {
       return activeFilter === "All" || (p.tags || []).indexOf(activeFilter) !== -1;
     });
+    visible.sort((SORTS[activeSort] || SORTS.modified).fn);
     grid.innerHTML = visible.map(cardHTML).join("");
-    observeCards();
-    enrichWithGitHub(visible);
+    fillMeta(visible);
+    if (instant) {
+      // Used for the re-render after metadata loads — avoids replaying the fade-in.
+      Array.prototype.forEach.call(grid.children, function (c) {
+        c.classList.add("card--in");
+      });
+    } else {
+      observeCards();
+    }
   }
 
   // --- Reveal-on-scroll animation ---
@@ -123,26 +185,42 @@
     return Math.floor(m / 12) + "y ago";
   }
 
-  function enrichWithGitHub(list) {
+  // Write the cached GitHub stats (★ / "updated …") into rendered cards.
+  function fillMeta(list) {
     list.forEach(function (p) {
-      fetch("https://api.github.com/repos/" + user + "/" + p.repo)
+      var m = metaCache[p.repo];
+      if (!m) return;
+      var el = grid.querySelector('.card__meta[data-repo="' + p.repo + '"]');
+      if (!el) return;
+      var bits = [];
+      if (typeof m.stars === "number" && m.stars > 0) bits.push("★ " + m.stars);
+      if (m.pushed_at) bits.push("updated " + timeAgo(m.pushed_at));
+      el.textContent = bits.join(" · ");
+    });
+  }
+
+  // Fetch all repo metadata once, then re-render so the date sorts have data.
+  function prefetchMeta() {
+    var pending = projects.map(function (p) {
+      return fetch("https://api.github.com/repos/" + user + "/" + p.repo)
         .then(function (r) {
           return r.ok ? r.json() : null;
         })
         .then(function (data) {
           if (!data) return;
-          var el = grid.querySelector('.card__meta[data-repo="' + p.repo + '"]');
-          if (!el) return;
-          var bits = [];
-          if (typeof data.stargazers_count === "number" && data.stargazers_count > 0) {
-            bits.push("★ " + data.stargazers_count);
-          }
-          if (data.pushed_at) bits.push("updated " + timeAgo(data.pushed_at));
-          el.textContent = bits.join(" · ");
+          metaCache[p.repo] = {
+            created_at: data.created_at,
+            pushed_at: data.pushed_at,
+            stars: data.stargazers_count,
+          };
         })
         .catch(function () {
           /* offline or rate-limited — silently keep static card */
         });
+    });
+    if (!pending.length) return;
+    Promise.all(pending).then(function () {
+      renderCards(true);
     });
   }
 
@@ -355,5 +433,6 @@
   });
 
   renderCards();
+  prefetchMeta();
   countUp();
 })();
