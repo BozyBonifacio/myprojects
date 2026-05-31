@@ -12,8 +12,8 @@
 
 window.PROJECTS = [
   {
-    title: "terraform-test",
-    repo: "terraform-test",
+    title: "terraform-infracost",
+    repo: "terraform-infracost",
     blurb: "Infrastructure-as-Code experiments with Terraform — provisioning and tearing down cloud resources declaratively.",
     tags: ["Terraform", "IaC", "Cloud"],
     icon: "🏗️",
@@ -35,7 +35,7 @@ window.PROJECTS = [
       {
         kind: "terminal",
         title: "terraform plan",
-        prompt: "~/terraform-test",
+        prompt: "~/terraform-infracost",
         lines: [
           { t: "$ terraform plan", c: "cmd" },
           { t: "Acquiring state lock. This may take a few moments...", c: "dim" },
