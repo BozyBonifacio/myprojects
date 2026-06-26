@@ -291,33 +291,16 @@ window.PROJECTS = [
         caption: "Profile Chat",
       },
       {
-        kind: "screen",
-        frame: "phone",
-        title: "conversation",
-        caption: "Frontend talking to the chatbot API.",
-        html:
-          '<div class="mk-chat">' +
-          '<div class="mk-chat__head">AssistBot</div>' +
-          '<div class="mk-chat__body">' +
-          '<div class="mk-bubble mk-bubble--bot">Hi! How can I help today?</div>' +
-          '<div class="mk-bubble mk-bubble--me">Show my recent orders</div>' +
-          '<div class="mk-bubble mk-bubble--bot">You have 3 recent orders. The latest shipped yesterday 📦</div>' +
-          "</div>" +
-          '<div class="mk-chat__input">Type a message…</div>' +
-          "</div>",
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/chatbot2.png",
+        caption: "Profile Chat",
       },
       {
-        kind: "terminal",
-        title: "POST /api/chat",
-        prompt: "~/chatbot-backend",
-        lines: [
-          { t: "$ curl -s localhost:3000/api/chat -d '{\"msg\":\"hello\"}'", c: "cmd" },
-          { t: "{", c: "dim" },
-          { t: '  "reply": "Hi! How can I help today?",', c: "ok" },
-          { t: '  "intent": "greeting",', c: "ok" },
-          { t: '  "latency_ms": 42', c: "ok" },
-          { t: "}", c: "dim" },
-        ],
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/chatbot3.png",
+        caption: "Profile Chat",
       },
     ],
   },
