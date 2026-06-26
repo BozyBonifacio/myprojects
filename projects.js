@@ -285,6 +285,12 @@ window.PROJECTS = [
     demo: null,
     shots: [
       {
+        kind: "image",
+        frame: "browser",
+        src: "screenshots/chatbot1.png",
+        caption: "Profile Chat",
+      },
+      {
         kind: "screen",
         frame: "phone",
         title: "conversation",
