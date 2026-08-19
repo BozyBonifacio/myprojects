@@ -353,7 +353,7 @@ window.PROJECTS = [
             {
         kind: "image",
         frame: "browser",
-        src: "screenshots\conftest.png",
+        src: "screenshots/conftest.png",
         caption: "terraform-conftest",
       },
     ],
