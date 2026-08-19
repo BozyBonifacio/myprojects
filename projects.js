@@ -350,21 +350,11 @@ window.PROJECTS = [
     icon: "🛡️",
     demo: null,
     shots: [
-      {
-        kind: "terminal",
-        title: "conftest test",
-        prompt: "~/terraform-conftest",
-        lines: [
-          { t: "$ terraform show -json tfplan > plan.json", c: "cmd" },
-          { t: "$ conftest test plan.json", c: "cmd" },
-          { t: "" },
-          { t: "WARN - plan.json - main - S3 bucket should have versioning enabled", c: "warn" },
-          { t: "FAIL - plan.json - main - Security group must not allow 0.0.0.0/0 on port 22", c: "err" },
-          { t: "PASS - plan.json - main - All resources are tagged with 'environment'", c: "ok" },
-          { t: "PASS - plan.json - main - EBS volumes are encrypted", c: "ok" },
-          { t: "" },
-          { t: "12 tests, 10 passed, 1 warning, 1 failure", c: "head" },
-        ],
+            {
+        kind: "image",
+        frame: "browser",
+        src: "screenshots\conftest.png",
+        caption: "terraform-conftest",
       },
     ],
   },
