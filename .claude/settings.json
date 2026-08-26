@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(git -C c:\\\\git\\\\myprojects log --oneline -5 -- projects.js)",
+      "PowerShell(git -C c:\\\\git\\\\myprojects show b510ec4 --stat)"
+    ]
+  }
+}

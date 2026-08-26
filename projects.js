@@ -12,6 +12,63 @@
 
 window.PROJECTS = [
   {
+    title: "mcp-cloudops-demo",
+    repo: "mcp-cloudops-demo",
+    url: "https://github.com/BozyBonifacio/mcp-cloudops-demo",
+    blurb: "A Model Context Protocol server for CloudOps — exposes tools, resources and prompts over deterministic fake Azure-style data, plus a browser MCP client that correlates incidents, deployments and logs with no LLM API key required.",
+    tags: ["Python", "MCP", "AI", "CloudOps"],
+    icon: "🧩",
+    demo: null,
+    shots: [
+      {
+        kind: "screen",
+        frame: "browser",
+        title: "browser MCP client",
+        caption: "The FastAPI client starts the MCP server over stdio, calls tools, and shows the trace.",
+        html:
+          '<div class="mk-chat">' +
+          '<div class="mk-chat__head">MCP CloudOps Demo · localhost:8000</div>' +
+          '<div class="mk-chat__body">' +
+          '<div class="mk-bubble mk-bubble--me">Investigate the open incident affecting payments-api and tell me the likely cause.</div>' +
+          '<div class="mk-bubble mk-bubble--bot">INC-1042 (payments-api) is open. api-prod-02 is <b>degraded</b> — CPU 94%. Deployment d-8831 shipped 12 min before the first ERROR burst. Likely cause: the latest payments-api release.</div>' +
+          '<div class="mk-bubble mk-bubble--bot"><small>MCP trace · get_open_incidents → list_servers → get_server_health → get_recent_deployments → search_logs</small></div>' +
+          "</div>" +
+          '<div class="mk-chat__input">Ask about servers, incidents, deployments or logs…</div>' +
+          "</div>",
+      },
+      {
+        kind: "terminal",
+        title: "mcp inspector",
+        prompt: "~/mcp-cloudops-demo",
+        lines: [
+          { t: "$ mcp dev src/mcp_cloudops/server.py", c: "cmd" },
+          { t: "MCP Inspector running at http://127.0.0.1:6274", c: "dim" },
+          { t: "" },
+          { t: "Discovered capabilities:", c: "head" },
+          { t: "  tools/list      6  list_servers, get_server_health, get_recent_deployments,", c: "ok" },
+          { t: "                     get_open_incidents, search_logs, restart_demo_service", c: "ok" },
+          { t: "  resources/list  3  infra://inventory/all, infra://inventory/production,", c: "ok" },
+          { t: "                     ops://incidents/open", c: "ok" },
+          { t: "  prompts/list    2  investigate_incident, daily_cloudops_summary", c: "ok" },
+          { t: "" },
+          { t: "> tools/call list_servers {\"environment\": \"prod\"}", c: "cmd" },
+          { t: "  api-prod-01   healthy    cpu 41%   ap-southeast-2", c: "dim" },
+          { t: "  api-prod-02   degraded   cpu 94%   ap-southeast-2", c: "warn" },
+          { t: "" },
+          { t: "> tools/call get_recent_deployments {\"service\": \"payments-api\"}", c: "cmd" },
+          { t: "  d-8831   payments-api   12 min before first ERROR", c: "warn" },
+          { t: "" },
+          { t: "> tools/call restart_demo_service {\"server_name\": \"api-prod-02\"}", c: "cmd" },
+          { t: "  refused: confirmation required — re-call with confirmed=true", c: "err" },
+          { t: "" },
+          { t: "$ pytest -q", c: "cmd" },
+          { t: ".......................                                   [100%]", c: "dim" },
+          { t: "23 passed in 0.6s", c: "ok" },
+        ],
+      },
+    ],
+  },
+  {
     title: "terraform-infracost",
     repo: "terraform-infracost",
     url: "https://github.com/BozyBonifacio/terraform-infracost",
