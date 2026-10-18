@@ -12,6 +12,54 @@
 
 window.PROJECTS = [
   {
+    title: "AKS Monitor",
+    repo: "aksmonitor",
+    url: "https://github.com/BozyBonifacio/aksmonitor",
+    blurb: "A browser-based console for Azure Kubernetes Service on App Service — cluster overview, resources, logs, GitOps (Flux/Argo CD) and Defender vulnerability views, with optional AI diagnosis. Every call runs as the signed-in Entra user, and every action is audited.",
+    tags: ["JavaScript", "Azure", "AKS", "Kubernetes"],
+    icon: "🛰️",
+    demo: null,
+    shots: [
+      {
+        kind: "screen",
+        frame: "browser",
+        title: "cluster overview",
+        caption: "Overview of the selected cluster: node and pod health, degraded workloads and warning events.",
+        html:
+          '<div class="mk-app">' +
+          '<div class="mk-app__bar">aksmonitor · aks-prod-uks</div>' +
+          '<div class="mk-kpis">' +
+          '<div class="mk-kpi"><b>6/6</b><small>nodes ready</small></div>' +
+          '<div class="mk-kpi"><b>142</b><small>pods running</small></div>' +
+          '<div class="mk-kpi"><b>1</b><small>degraded deploy</small></div>' +
+          "</div>" +
+          '<div class="mk-list">' +
+          '<div class="mk-li"><span>deploy/payments-api · 2/3 ready</span><b>Degraded</b></div>' +
+          '<div class="mk-li"><span>pod/payments-api-7d9f · CrashLoopBackOff</span><b>Warning</b></div>' +
+          '<div class="mk-li"><span>kustomization/apps · flux-system</span><b>Ready</b></div>' +
+          "</div>" +
+          "</div>",
+      },
+      {
+        kind: "terminal",
+        title: "local dev",
+        prompt: "~/aksmonitor",
+        lines: [
+          { t: "$ az login", c: "cmd" },
+          { t: "$ npm install && npm test", c: "cmd" },
+          { t: "added 3 runtime dependencies (express, @azure/identity, yaml)", c: "dim" },
+          { t: "✔ all tests passed", c: "ok" },
+          { t: "" },
+          { t: "$ npm run local", c: "cmd" },
+          { t: "aksmonitor listening on http://localhost:8080", c: "head" },
+          { t: "dev mode: acting as dev@localhost (DEV_ROLE=viewer)", c: "dim" },
+          { t: "READ_ONLY=true — actions disabled", c: "warn" },
+          { t: "discovered 2 AKS clusters via ARM", c: "ok" },
+        ],
+      },
+    ],
+  },
+  {
     title: "mcp-cloudops-demo",
     repo: "mcp-cloudops-demo",
     url: "https://github.com/BozyBonifacio/mcp-cloudops-demo",

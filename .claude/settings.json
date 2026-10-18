@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "PowerShell(git -C c:\\\\git\\\\myprojects log --oneline -5 -- projects.js)",
-      "PowerShell(git -C c:\\\\git\\\\myprojects show b510ec4 --stat)"
+      "PowerShell(git -C c:\\\\git\\\\myprojects show b510ec4 --stat)",
+      "Bash(curl -s https://raw.githubusercontent.com/BozyBonifacio/aksmonitor/main/README.md)",
+      "Bash(curl -s https://api.github.com/repos/BozyBonifacio/aksmonitor)",
+      "Bash(curl -s https://api.github.com/repos/BozyBonifacio/aksmonitor/contents)",
+      "Bash(node -e \"global.window={};require\\('./projects.js'\\);console.log\\(window.PROJECTS.length, window.PROJECTS[0].title\\)\")"
     ]
   }
 }
